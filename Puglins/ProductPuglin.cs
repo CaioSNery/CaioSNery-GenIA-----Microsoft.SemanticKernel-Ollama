@@ -17,6 +17,23 @@ namespace Demo4.Puglins
         new(5,"Monitor",true,5)
         ];
 
+        [KernelFunction("get_state")]
+        [Description("Change State of the product")]
+        public async Task<Product?> ChangeStateAsync(
+            [Description("The id of the product")]int id,
+            [Description("The Content of the product to be modified")]Product model)
+        {
+            await Task.Delay(1);
+            var product= _products.FirstOrDefault(x=>x.Id==id);
+
+            if(product == null)
+            return null;
+
+            product = new Product(model.Id,model.Title,model.isActive,model.QuantityOnHand);
+
+            return product; 
+        }
+
         [KernelFunction("get_product")]
         [Description("Get a list of products and their current status")]
         public async Task<List<Product>>GetProductAsync()
@@ -25,9 +42,6 @@ namespace Demo4.Puglins
             return _products;
         }
     }
-
-    
-    
 
     public record Product(int Id, string Title, bool isActive, int QuantityOnHand);
 }
